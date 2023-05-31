@@ -1,6 +1,6 @@
 ---
 title: "Lab 03"
-author: ""
+author: "farha hussaini"
 date: ""
 editor_options: 
   chunk_output_type: console
@@ -27,13 +27,19 @@ fl_votes %>%
 # Exercise 1
 
 ```{r add-winner}
-
+fl_votes <- fl_votes %>%
+mutate(winner20 = if_else(rep20 > dem20, "Republican", "Democratic"))
 ```
 
 
 # Exercise 2
 
 ```{r fl-plot-1}
+fl_votes %>% ggplot() +
+geom_sf(data = fl_votes, aes(fill = winner20)) +
+scale_fill_manual(values = c("#0015BC" , "#DE0100")) +
+ggtitle("Florida's 2020 U.S. Presidential Election Results by County") +
+theme_void()
 
 
 ```
@@ -41,28 +47,57 @@ fl_votes %>%
 # Exercise #3
 
 ```{r fl-props}
-
+fl_votes <- fl_votes %>%
+mutate(total16 = dem16 + rep16,
+total20 = dem20 + rep20,
+prop_rep16 = rep16 / total16,
+prop_rep20 = rep20 / total20)
 ```
 
 # Exercise 4
 
 ```{r fl-plot-2}
 
+ggplot(fl_votes) +
+geom_sf(aes(fill=prop_rep20)) +
+scale_fill_gradient(low="#0015BC", high="#DE0100") +
+  labs(title="Election 2020 Results", fill="Republican share of votes") +
+theme_bw()
+
+
 ```
 
 # Exercise 5
 
 ```{r fl-change}
-
+fl_votes <- fl_votes %>%
+mutate(diff_rep = prop_rep20 - prop_rep16)
 ```
 
 # Exercise 6
 
 ```{r fl-plot-3}
-
+ggplot(fl_votes) +
+geom_sf(aes(fill=diff_rep)) +
+scale_fill_gradient2(low="#0015BC", midpoint=0,
+high="#DE0100") +
+labs(title="Election 2020 Results", fill="change in
+Republican share") +
+theme_bw()
 ```
 
 # Exercise 7
 
 
+First graph tells us that while there are some blue counties in Florida, the state overall is dominated by red
+counties, indicating a Republican stronghold.
+The second visualization shows us that there are some counties in Florida where the Republican share of the
+vote is lower, means that these counties may be more politically diverse or leaning towards the Democratic
+party.
+The third graph shows that there were some counties where the Republican share of the vote decreased from
+2016 to 2020, indicating that these counties may be shifting away from the Republican party.
+these visualizations have limitations. They do not take into account demographic factors, that may influence
+voting patterns. Additionally, they only provide a snapshot of a specific point in time. Also, it is only
+show the Republican and Democratic parties, and do not account for third-party candidates or independent
+voters.
 
